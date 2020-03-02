@@ -8,7 +8,7 @@
 - Insert Dockerfile for local usability
 - Modeling CI/CD pipeline with AWS CodePipeline
 - Enable Wordpress backups and update automation
-- Add RDS MySQL database
+- Management Application database with snapshot (only 1 server for app/database)
 - Management migration of the version 'v5.2.0' to 'v5.3.2'
 
 ## Wordpress Application
