@@ -1,4 +1,5 @@
+
 REPORT.md
-.pem
+*.pem
 .envrc
 packer
