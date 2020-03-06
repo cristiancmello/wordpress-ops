@@ -4,6 +4,8 @@
 
 - Deployment with WordPress Official Application from scratch
 - This Ops project belongs to Application. Therefore, `wordpress-ops v1.0.0 delivery WordPress v5.2.0`
+- Add docker swarm config
+- Management containers with Portainer and interact with API
 - Use AWS Cloudformation to specify application stack
 - Insert Dockerfile for local usability
 - Modeling CI/CD pipeline with AWS CodePipeline
