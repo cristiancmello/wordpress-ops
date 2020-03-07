@@ -14,9 +14,9 @@
         "owners": ["137112412989"],
         "most_recent": true
       },
-      "instance_type": "t2.micro",
+      "instance_type": "t3.micro",
       "ssh_username": "ec2-user",
-      "ami_name": "wordpress-ops-host-1.0.0-{{timestamp}}"
+      "ami_name": "wordpress-ops-host-1.0.0-20200307-{{timestamp}}"
     }
   ],
   "provisioners": [
@@ -26,8 +26,28 @@
     },
     {
       "type": "shell",
+      "script": "./setup-rexray-ebs.sh",
+      "environment_vars": [
+        "EBS_REGION={{user `ebs_region`}}",
+        "REXRAY_SERVICE={{user `rexray_service`}}",
+        "EBS_ACCESSKEY={{user `ebs_accesskey`}}",
+        "EBS_SECRETKEY={{user `ebs_secretkey`}}"
+      ]
+    },
+    {
+      "type": "shell",
       "inline": ["sudo reboot"],
       "expect_disconnect": true
+    },
+    {
+      "type": "shell",
+      "script": "./setup-rexray-docker-plugin.sh",
+      "environment_vars": [
+        "EBS_REGION={{user `ebs_region`}}",
+        "REXRAY_SERVICE={{user `rexray_service`}}",
+        "EBS_ACCESSKEY={{user `ebs_accesskey`}}",
+        "EBS_SECRETKEY={{user `ebs_secretkey`}}"
+      ]
     },
     {
       "type": "shell",
