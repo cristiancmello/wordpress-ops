@@ -1,5 +1,13 @@
+# package directories
+node_modules
+jspm_packages
+
+# Serverless directories
+.serverless
 
 REPORT.md
 *.pem
 .envrc
 packer
+
+secrets
