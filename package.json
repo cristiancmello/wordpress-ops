@@ -1,0 +1,11 @@
+{
+  "name": "wordpress-ops",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:cristiancmello/wordpress-ops.git",
+  "author": "Cristian Mello <cristianc.mello@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "aws-sdk": "^2.634.0"
+  }
+}
