@@ -26,7 +26,7 @@
     },
     {
       "type": "shell",
-      "script": "./setup-rexray-ebs.sh",
+      "script": "./setup-rexray.sh",
       "environment_vars": [
         "EBS_REGION={{user `ebs_region`}}",
         "REXRAY_SERVICE={{user `rexray_service`}}",
@@ -51,7 +51,7 @@
     },
     {
       "type": "shell",
-      "script": "./setup-docker-swarm-portainer.sh"
+      "script": "./setup-docker-pull-default-images.sh"
     }
   ]
 }
