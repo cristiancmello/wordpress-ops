@@ -1,17 +1,17 @@
 "use strict";
 
 const AWS = require("aws-sdk");
-const { exec, pwd } = require("shelljs");
+const { exec, pwd, env } = require("shelljs");
 
 module.exports.deploy = async event => {
+  exec(`export AWS_ACCESS_KEY_ID=${process.env.ACCESS_KEY_ID}`);
+  exec(`export AWS_SECRET_ACCESS_KEY=${process.env.SECRET_ACCESS_KEY}`);
+  exec(`export AWS_DEFAULT_REGION=us-east-1`);
+
   const cdkExec = exec(
     "./node_modules/cdk/bin/cdk deploy -o /tmp/cdk.out --require-approval never",
     { silent: true }
   );
-
-  console.log({
-    env: process.env
-  });
 
   return {
     statusCode: 200,
