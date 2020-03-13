@@ -4,29 +4,13 @@ const AWS = require("aws-sdk");
 const { exec, pwd } = require("shelljs");
 
 module.exports.deploy = async event => {
-  // const child = exec(
-  //   "./node_modules/cdk/bin/cdk deploy --require-approval never",
-  //   {
-  //     silent: true,
-  //     async: true
-  //   }
-  // );
-
-  // child.stdout.on("data", function(data) {
-  //   console.log(data);
-  // });
-
-  // child.stderr.on("data", data => {
-  //   console.log(data);
-  // });
-
   const cdkExec = exec(
     "./node_modules/cdk/bin/cdk deploy -o /tmp/cdk.out --require-approval never",
     { silent: true }
   );
 
   console.log({
-    SECRET_KEY: process.env.SECRET_KEY
+    env: process.env
   });
 
   return {

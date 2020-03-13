@@ -12,7 +12,11 @@ provider:
   stage: dev
   region: us-east-1
   timeout: 30
-
+  environment:
+    CDK_DEFAULT_ACCOUNT: ${ssm:/station_orch/CDK_DEFAULT_ACCOUNT~true}
+    CDK_DEFAULT_REGION: ${ssm:/station_orch/CDK_DEFAULT_REGION~true}
+    ACCESS_KEY_ID: ${ssm:/station_orch/AWS_ACCESS_KEY_ID~true}
+    SECRET_ACCESS_KEY: ${ssm:/station_orch/AWS_SECRET_ACCESS_KEY~true}
 # you can add statements to the Lambda function's IAM Role here
 #  iamRoleStatements:
 #    - Effect: "Allow"
@@ -28,15 +32,6 @@ provider:
 #          - - "arn:aws:s3:::"
 #            - "Ref" : "ServerlessDeploymentBucket"
 #            - "/*"
-
-# you can define service wide environment variables here
-environment:
-  SECRET_KEY: "TESTES...."
-  AWS_REGION: "us-east-1"
-  # CDK_DEFAULT_ACCOUNT: ${ssm:STATION_ORCH_CDK_DEFAULT_ACCOUNT}
-  # CDK_DEFAULT_REGION: ${ssm:STATION_ORCH_CDK_DEFAULT_REGION}
-  # KEY_1: ${ssm:/station_orch/STATION_ORCH_AWS_ACCESS_KEY_ID}
-  # KEY_2: ${ssm:STATION_ORCH_AWS_SECRET_ACCESS_KEY}
 
 # you can add packaging information here
 #package:
