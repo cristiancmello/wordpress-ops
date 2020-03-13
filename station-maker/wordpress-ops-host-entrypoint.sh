@@ -18,6 +18,10 @@ docker run -d -p 9000:9000 -p 8000:8000 \
 
 sleep 10
 
+docker plugin enable rexray/ebs:latest
+docker plugin enable rexray/s3fs:latest
+docker plugin enable rexray/efs:latest
+
 BEARER_TOKEN=$(curl -X POST localhost:9000/api/auth -d "{\"Username\": \"admin\", \"Password\": \"12345678\"}" | jq -r '.jwt')
 
 curl -v -X PUT localhost:9000/api/endpoints/1 \

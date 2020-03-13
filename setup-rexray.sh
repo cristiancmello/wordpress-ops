@@ -11,6 +11,8 @@ libstorage:
         driver: ebs
       s3fs:
         driver: s3fs
+      efs:
+        driver: efs
 ebs:
   accessKey: $EBS_ACCESSKEY
   secretKey: $EBS_SECRETKEY
@@ -21,6 +23,16 @@ s3fs:
   accessKey:        $EBS_ACCESSKEY
   secretKey:        $EBS_SECRETKEY
   disablePathStyle: false
+
+efs:
+  accessKey:           $EBS_ACCESSKEY
+  secretKey:           $EBS_SECRETKEY
+  region:              $EBS_REGION
+  tag:                 test
+  disableSessionCache: false
+  statusMaxAttempts:   6
+  statusInitialDelay:  1s
+  statusTimeout:       2m
 EOF"
 
 # Verify env vars...
