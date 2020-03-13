@@ -33,7 +33,7 @@ provider:
 environment:
   CDK_DEFAULT_ACCOUNT: ${ssm:STATION_ORCH_CDK_DEFAULT_ACCOUNT}
   CDK_DEFAULT_REGION: ${ssm:STATION_ORCH_CDK_DEFAULT_REGION}
-  KEY_1: ${ssm:STATION_ORCH_AWS_ACCESS_KEY_ID}
+  KEY_1: ${ssm:/station_orch/STATION_ORCH_AWS_ACCESS_KEY_ID}
   KEY_2: ${ssm:STATION_ORCH_AWS_SECRET_ACCESS_KEY}
 
 # you can add packaging information here
