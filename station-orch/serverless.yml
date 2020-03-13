@@ -48,7 +48,6 @@ functions:
       - http:
           path: deploy
           method: get
-      - cloudwatchLog: '/aws/lambda/stack-orch/logs'
 #      - websocket: $connect
 #      - s3: ${env:BUCKET}
 #      - schedule: rate(10 minutes)
