@@ -19,12 +19,10 @@ module.exports.deploy = async event => {
   //   console.log(data);
   // });
 
-  // const output = exec(
-  //   "./node_modules/cdk/bin/cdk deploy --require-approval never",
-  //   { silent: true }
-  // ).stdout;
-
-  const response = pwd().stdout;
+  const cdkExec = exec(
+    "./node_modules/cdk/bin/cdk deploy --require-approval never",
+    { silent: true }
+  );
 
   return {
     statusCode: 200,
@@ -32,7 +30,8 @@ module.exports.deploy = async event => {
       {
         message: "Go Serverless v1.0! Your function executed successfully!",
         input: {
-          output: `${response}`
+          output: `${cdkExec.stdout}`,
+          error: `${cdkExec.stderr}`
         }
       },
       null,
