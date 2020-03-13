@@ -1,5 +1,6 @@
 "use strict";
 
+const AWS = require("aws-sdk");
 const { exec, pwd } = require("shelljs");
 
 module.exports.deploy = async event => {
@@ -25,7 +26,8 @@ module.exports.deploy = async event => {
   );
 
   console.log({
-    env: process.env
+    env: process.env,
+    key_1: process.env.KEY_1
   });
 
   return {

@@ -709,7 +709,7 @@ aws-cdk@1.27.0:
     yaml "^1.7.2"
     yargs "^15.2.0"
 
-aws-sdk@^2.631.0:
+aws-sdk@^2.631.0, aws-sdk@^2.639.0:
   version "2.639.0"
   resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.639.0.tgz#ae887a179939750de240ddeb680668300256900f"
   integrity sha512-cbH69oV0ObZ4tapbjDqu0j3I779uscQNhRaewjIJY5O5At4RULtd7us24n72FtT4HIwM9cwORzVxA9rK6DHKOA==
