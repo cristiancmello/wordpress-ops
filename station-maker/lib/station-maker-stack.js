@@ -51,9 +51,9 @@ class StationMakerStack extends cdk.Stack {
           },
           disableApiTermination: false,
           ebsOptimized: false,
-          imageId: "ami-0561872c553236c1a",
+          imageId: "ami-07e0764b1422b5158",
           instanceInitiatedShutdownBehavior: "terminate",
-          instanceType: "t2.micro",
+          instanceType: "t3a.micro",
           keyName: "wordpress-ops-host-keypair-2020-03-11",
           monitoring: {
             enabled: false
