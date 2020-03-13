@@ -26,8 +26,7 @@ module.exports.deploy = async event => {
   );
 
   console.log({
-    env: process.env,
-    key_1: process.env.KEY_1
+    SECRET_KEY: process.env.SECRET_KEY
   });
 
   return {
