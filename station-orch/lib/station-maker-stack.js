@@ -71,9 +71,9 @@ class StationMakerStack extends cdk.Stack {
       this,
       "wordpressOpsHostAutoscaling",
       {
-        desiredCapacity: "1",
-        minSize: "1",
-        maxSize: "1",
+        desiredCapacity: "0",
+        minSize: "0",
+        maxSize: "0",
         launchTemplate: {
           launchTemplateId: wordpressOpsHostLaunchTemplate.ref,
           version: wordpressOpsHostLaunchTemplate.attrLatestVersionNumber
