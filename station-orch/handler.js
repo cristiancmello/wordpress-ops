@@ -3,28 +3,35 @@
 const { exec, pwd } = require("shelljs");
 
 module.exports.deploy = async event => {
-  const child = exec(
+  // const child = exec(
+  //   "./node_modules/cdk/bin/cdk deploy --require-approval never",
+  //   {
+  //     silent: true,
+  //     async: true
+  //   }
+  // );
+
+  // child.stdout.on("data", function(data) {
+  //   console.log(data);
+  // });
+
+  // child.stderr.on("data", data => {
+  //   console.log(data);
+  // });
+
+  const output = exec(
     "./node_modules/cdk/bin/cdk deploy --require-approval never",
-    {
-      silent: true,
-      async: true
-    }
-  );
-
-  child.stdout.on("data", function(data) {
-    console.log(data);
-  });
-
-  child.stderr.on("data", data => {
-    console.log(data);
-  });
+    { silent: true }
+  ).stdout;
 
   return {
     statusCode: 200,
     body: JSON.stringify(
       {
         message: "Go Serverless v1.0! Your function executed successfully!",
-        input: {}
+        input: {
+          output: `${output}`
+        }
       },
       null,
       2
