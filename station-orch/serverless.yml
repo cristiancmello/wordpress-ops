@@ -12,8 +12,6 @@ provider:
   stage: dev
   region: us-east-1
   timeout: 30
-  logs:
-    websocket: true
 
 # you can add statements to the Lambda function's IAM Role here
 #  iamRoleStatements:
@@ -32,8 +30,11 @@ provider:
 #            - "/*"
 
 # you can define service wide environment variables here
-#  environment:
-#    variable1: value1
+environment:
+  CDK_DEFAULT_ACCOUNT: ${ssm:STATION_ORCH_CDK_DEFAULT_ACCOUNT}
+  CDK_DEFAULT_REGION: ${ssm:STATION_ORCH_CDK_DEFAULT_REGION}
+  ACCESS_KEY_ID: ${ssm:STATION_ORCH_AWS_ACCESS_KEY_ID}
+  SECRET_ACCESS_KEY: ${ssm:STATION_ORCH_AWS_SECRET_ACCESS_KEY}
 
 # you can add packaging information here
 #package:
