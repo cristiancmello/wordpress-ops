@@ -17,21 +17,12 @@ provider:
     CDK_DEFAULT_REGION: ${ssm:/station_orch/CDK_DEFAULT_REGION~true}
     ACCESS_KEY_ID: ${ssm:/station_orch/AWS_ACCESS_KEY_ID~true}
     SECRET_ACCESS_KEY: ${ssm:/station_orch/AWS_SECRET_ACCESS_KEY~true}
-# you can add statements to the Lambda function's IAM Role here
-#  iamRoleStatements:
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:ListBucket"
-#      Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:PutObject"
-#      Resource:
-#        Fn::Join:
-#          - ""
-#          - - "arn:aws:s3:::"
-#            - "Ref" : "ServerlessDeploymentBucket"
-#            - "/*"
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "*"
+      Resource: 
+        - "*"
 
 # you can add packaging information here
 #package:
