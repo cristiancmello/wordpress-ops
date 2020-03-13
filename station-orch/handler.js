@@ -20,7 +20,7 @@ module.exports.deploy = async event => {
   // });
 
   const cdkExec = exec(
-    "./node_modules/cdk/bin/cdk deploy --require-approval never",
+    "./node_modules/cdk/bin/cdk deploy -o /tmp/cdk.out --require-approval never",
     { silent: true }
   );
 
