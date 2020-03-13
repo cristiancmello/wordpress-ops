@@ -31,7 +31,7 @@ provider:
 
 # you can define service wide environment variables here
 environment:
-  SECRET_KEY: ${ssm:SECRET_KEY}
+  SECRET_KEY: ${env:SECRET_KEY}
   # CDK_DEFAULT_ACCOUNT: ${ssm:STATION_ORCH_CDK_DEFAULT_ACCOUNT}
   # CDK_DEFAULT_REGION: ${ssm:STATION_ORCH_CDK_DEFAULT_REGION}
   # KEY_1: ${ssm:/station_orch/STATION_ORCH_AWS_ACCESS_KEY_ID}
