@@ -42,16 +42,8 @@ EOF"
 
   const cdkExec = exec(
     `./node_modules/cdk/bin/cdk deploy -o /tmp/cdk.out --plugin cdk-profile-plugin --require-approval never`,
-    { async: true }
+    { silent: false }
   );
-
-  cdkExec.stdout.on("data", function(data) {
-    console.log(data);
-  });
-
-  cdkExec.stderr.on("data", function(data) {
-    console.log(data);
-  });
 
   return {};
 };
