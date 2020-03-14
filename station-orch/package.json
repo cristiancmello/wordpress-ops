@@ -1,6 +1,17 @@
 {
+  "name": "station-orch",
+  "version": "0.1.0",
+  "bin": {
+    "station-maker": "bin/station-maker.js"
+  },
+  "scripts": {
+    "build": "echo \"The build step is not required when using JavaScript!\" && exit 0",
+    "cdk": "cdk",
+    "test": "jest"
+  },
   "devDependencies": {
-    "serverless-offline": "^6.0.0-alpha.67"
+    "serverless-offline": "^6.0.0-alpha.67",
+    "jest": "^24.9.0"
   },
   "dependencies": {
     "@aws-cdk/aws-autoscaling": "^1.27.0",
