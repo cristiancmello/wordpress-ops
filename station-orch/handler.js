@@ -8,7 +8,7 @@ module.exports.deploy = async event => {
 export AWS_SHARED_CREDENTIALS_FILE=/tmp/.aws.default_profile/config
 mkdir /tmp/.aws.default_profile
 sh -c "cat <<EOF >> /tmp/.aws.default_profile/config
-[default]
+[profile myprofile]
 aws_access_key_id=${process.env.ACCESS_KEY_ID}
 aws_secret_access_key=${process.env.SECRET_ACCESS_KEY}
 region=us-east-1
@@ -17,7 +17,7 @@ EOF"
   `);
 
   const cdkExec = exec(
-    `./node_modules/cdk/bin/cdk deploy -o /tmp/cdk.out --require-approval never`,
+    `./node_modules/cdk/bin/cdk deploy -o /tmp/cdk.out --profile myprofile --require-approval never`,
     { silent: false }
   );
 
