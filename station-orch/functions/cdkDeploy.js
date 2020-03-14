@@ -11,6 +11,7 @@ module.exports.handler = async event => {
 
   exec(`
 rm -rf /tmp/.aws.${profileName}
+rm -rf /tmp/cdk.out
 mkdir /tmp/.aws.${profileName}
 mkdir /tmp/cdk.out
 sh -c "cat <<EOF >> /tmp/.aws.${profileName}/config
