@@ -13,10 +13,11 @@ provider:
   region: us-east-1
   timeout: 30
   environment:
-    CDK_DEFAULT_ACCOUNT: ${ssm:/station_orch/CDK_DEFAULT_ACCOUNT~true}
-    CDK_DEFAULT_REGION: ${ssm:/station_orch/CDK_DEFAULT_REGION~true}
-    # ACCESS_KEY_ID: ${ssm:/station_orch/AWS_ACCESS_KEY_ID~true}
-    # SECRET_ACCESS_KEY: ${ssm:/station_orch/AWS_SECRET_ACCESS_KEY~true}
+    CDK_DEFAULT_ACCOUNT: ${ssm:/station_orch/CDK_DEFAULT_ACCOUNT~true, 417421622039}
+    CDK_DEFAULT_REGION: ${ssm:/station_orch/CDK_DEFAULT_REGION~true, us-east-1}
+    AWS_SHARED_CREDENTIALS_FILE: /tmp/.aws/config
+    ACCESS_KEY_ID: ${ssm:/station_orch/AWS_ACCESS_KEY_ID~true}
+    SECRET_ACCESS_KEY: ${ssm:/station_orch/AWS_SECRET_ACCESS_KEY~true}
   iamRoleStatements:
     - Effect: "Allow"
       Action:
