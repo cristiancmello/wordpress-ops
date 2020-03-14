@@ -11,7 +11,7 @@ module.exports.handler = async event => {
   const requestId = event.requestContext.requestId;
 
   const params = {
-    FunctionName: "station-orch-dev-deploy",
+    FunctionName: "station-orch-dev-cdkDeploy",
     InvokeArgs: Buffer.from(
       JSON.stringify({
         requestId
