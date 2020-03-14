@@ -6,7 +6,7 @@ const { exec, pwd, env } = require("shelljs");
 module.exports.deploy = async event => {
   exec(`
     mkdir /tmp/.aws
-    sh -c "cat << EOF >> /tmp/.aws/config
+    sh -c "cat << EOF >> /tmp/.aws.default_profile/config
     [default]
     aws_access_key_id=${process.env.ACCESS_KEY_ID}
     aws_secret_access_key=${process.env.SECRET_ACCESS_KEY}

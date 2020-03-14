@@ -15,7 +15,7 @@ provider:
   environment:
     CDK_DEFAULT_ACCOUNT: ${ssm:/station_orch/CDK_DEFAULT_ACCOUNT~true, 417421622039}
     CDK_DEFAULT_REGION: ${ssm:/station_orch/CDK_DEFAULT_REGION~true, us-east-1}
-    AWS_SHARED_CREDENTIALS_FILE: /tmp/.aws/config
+    AWS_SHARED_CREDENTIALS_FILE: /tmp/.aws.default_profile/config
     ACCESS_KEY_ID: ${ssm:/station_orch/AWS_ACCESS_KEY_ID~true}
     SECRET_ACCESS_KEY: ${ssm:/station_orch/AWS_SECRET_ACCESS_KEY~true}
   iamRoleStatements:
