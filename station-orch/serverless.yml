@@ -15,8 +15,8 @@ provider:
   environment:
     CDK_DEFAULT_ACCOUNT: ${ssm:/station_orch/CDK_DEFAULT_ACCOUNT~true}
     CDK_DEFAULT_REGION: ${ssm:/station_orch/CDK_DEFAULT_REGION~true}
-    ACCESS_KEY_ID: ${ssm:/station_orch/AWS_ACCESS_KEY_ID~true}
-    SECRET_ACCESS_KEY: ${ssm:/station_orch/AWS_SECRET_ACCESS_KEY~true}
+    # ACCESS_KEY_ID: ${ssm:/station_orch/AWS_ACCESS_KEY_ID~true}
+    # SECRET_ACCESS_KEY: ${ssm:/station_orch/AWS_SECRET_ACCESS_KEY~true}
   iamRoleStatements:
     - Effect: "Allow"
       Action:

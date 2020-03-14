@@ -5,7 +5,7 @@ const { exec, pwd, env } = require("shelljs");
 
 module.exports.deploy = async event => {
   const cdkExec = exec(
-    `AWS_ACCESS_KEY_ID=${process.env.ACCESS_KEY_ID} AWS_SECRET_ACCESS_KEY=${process.env.SECRET_ACCESS_KEY} AWS_DEFAULT_REGION=us-east-1 ./node_modules/cdk/bin/cdk deploy -o /tmp/cdk.out --require-approval never`,
+    `./node_modules/cdk/bin/cdk deploy -o /tmp/cdk.out --require-approval never`,
     { silent: false }
   );
 
