@@ -12,6 +12,7 @@ module.exports.handler = async event => {
   exec(`
 rm -rf /tmp/.aws.${profileName}
 mkdir /tmp/.aws.${profileName}
+mkdir /tmp/cdk.out
 sh -c "cat <<EOF >> /tmp/.aws.${profileName}/config
 [profile ${profileName}]
 aws_access_key_id=${credentials.aws_access_key_id}
