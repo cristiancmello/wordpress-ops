@@ -12,6 +12,7 @@ module.exports.handler = async event => {
   const aws_region = credentials.aws_region;
   const aws_access_key_id = credentials.aws_access_key_id;
   const aws_secret_access_key = credentials.aws_secret_access_key;
+  const stackName = event.stackName;
 
   exec(`
 rm -rf /tmp/.aws.${profileName}
@@ -34,7 +35,8 @@ EOF"
       profileName,
       requestId,
       account,
-      aws_region
+      aws_region,
+      stackName
     })
   );
 

@@ -12,6 +12,7 @@ provider:
   stage: dev
   region: us-east-1
   environment:
+    CDK_DEFAULT_STACK_NAME: StationStack
     CDK_DEFAULT_ACCOUNT: ${ssm:/station_orch/AWS_ACCOUNT~true}
     CDK_DEFAULT_REGION: ${ssm:/station_orch/AWS_REGION~true}
     OPS_ACCESS_KEY_ID: ${ssm:/station_orch/AWS_ACCESS_KEY_ID~true}

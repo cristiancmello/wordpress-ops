@@ -20,7 +20,8 @@ module.exports.handler = async event => {
           aws_secret_access_key: process.env.OPS_SECRET_ACCESS_KEY,
           aws_region: process.env.OPS_AWS_REGION,
           account: process.env.CDK_DEFAULT_ACCOUNT
-        }
+        },
+        stackName: process.env.CDK_DEFAULT_STACK_NAME
       })
     )
   };

@@ -9,7 +9,7 @@ const stationInput = JSON.parse(
 );
 
 const app = new cdk.App();
-new StationMakerStack(app, stationInput.requestId, {
+new StationMakerStack(app, stationInput.stackName, {
   env: {
     account: stationInput.account,
     region: stationInput.aws_region
