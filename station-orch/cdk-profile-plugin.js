@@ -18,8 +18,6 @@ module.exports = {
       },
       getProvider(accountId, mode) {
         let profile = stationInput.profileName;
-
-        console.log("Using profile", profile, "for", accountId);
         let awsProvider = new SDK({
           profile
         }).credentialsCache.defaultCredentialProvider;
