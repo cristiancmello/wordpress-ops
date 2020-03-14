@@ -21,7 +21,7 @@ EOF"
     { silent: false }
   );
 
-  return {
-    event
-  };
+  console.log(event);
+
+  return {};
 };
