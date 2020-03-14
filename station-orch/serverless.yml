@@ -11,7 +11,6 @@ provider:
   runtime: nodejs12.x
   stage: dev
   region: us-east-1
-  timeout: 30
   environment:
     CDK_DEFAULT_ACCOUNT: ${ssm:/station_orch/CDK_DEFAULT_ACCOUNT~true}
     CDK_DEFAULT_REGION: ${ssm:/station_orch/CDK_DEFAULT_REGION~true}
@@ -34,12 +33,14 @@ provider:
 #    - exclude-me-dir/**
 
 functions:
-  deploy:
-    handler: handler.deploy
+  cdkDeploy:
+    handler: functions/cdkDeploy.handler
+  callCdkDeployAsync:
+    handler: functions/callCdkDeployAsync.handler
     events:
       - http:
-          path: deploy
-          method: get
+          path: hosts/deploy
+          method: POST
 #      - websocket: $connect
 #      - s3: ${env:BUCKET}
 #      - schedule: rate(10 minutes)

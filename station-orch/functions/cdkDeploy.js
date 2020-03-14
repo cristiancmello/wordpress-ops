@@ -3,7 +3,7 @@
 const AWS = require("aws-sdk");
 const { exec, pwd, env } = require("shelljs");
 
-module.exports.deploy = async event => {
+module.exports.handler = async event => {
   exec(`
 rm -rf /tmp/.aws.default_profile
 mkdir /tmp/.aws.default_profile
@@ -22,20 +22,6 @@ EOF"
   );
 
   return {
-    statusCode: 200,
-    body: JSON.stringify(
-      {
-        message: "Go Serverless v1.0! Your function executed successfully!",
-        input: {
-          output: `${cdkExec.stdout}`,
-          error: `${cdkExec.stderr}`
-        }
-      },
-      null,
-      2
-    )
+    event
   };
-
-  // Use this code if you don't use the http event with the LAMBDA-PROXY integration
-  // return { message: 'Go Serverless v1.0! Your function executed successfully!', event };
 };
