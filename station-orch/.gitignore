@@ -5,9 +5,6 @@ jspm_packages
 # Serverless directories
 .serverless
 
-REPORT.md
-*.pem
-.envrc
-packer
-
-secrets
+# CDK asset staging directory
+.cdk.staging
+cdk.out

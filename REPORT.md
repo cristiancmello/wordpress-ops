@@ -160,3 +160,8 @@ admin: false
 
 https://docs.docker.com/engine/api/v1.39/
 https://gist.github.com/deviantony/77026d402366b4b43fa5918d41bc42f8
+
+## TESTS...
+
+* REXRay
+* vscode plugin (OK for ssh connection. How to access docker volume???)

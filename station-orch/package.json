@@ -1,0 +1,14 @@
+{
+  "devDependencies": {
+    "serverless-offline": "^6.0.0-alpha.67"
+  },
+  "dependencies": {
+    "@aws-cdk/aws-autoscaling": "^1.27.0",
+    "@aws-cdk/aws-ec2": "^1.27.0",
+    "@aws-cdk/core": "^1.27.0",
+    "aws-cdk": "1.27.0",
+    "aws-sdk": "^2.639.0",
+    "cdk": "^1.27.0",
+    "shelljs": "^0.8.3"
+  }
+}
