@@ -8,6 +8,8 @@ const stationInput = JSON.parse(
   fs.readFileSync("/tmp/cdk.out/station.input.json").toString()
 );
 
+process.env.PROCESS_ID = stationInput.processId;
+
 const app = new cdk.App();
 new StationMakerStack(app, stationInput.stackName, {
   env: {

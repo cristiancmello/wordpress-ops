@@ -2,6 +2,7 @@
 
 const AWS = require("aws-sdk");
 const lambda = new AWS.Lambda();
+const randomstring = require("randomstring");
 
 const callCdkDeployLambda = params => {
   return lambda.invokeAsync(params).promise();
@@ -9,12 +10,14 @@ const callCdkDeployLambda = params => {
 
 module.exports.handler = async event => {
   const requestId = event.requestContext.requestId;
+  const processId = randomstring.generate(7);
 
   const params = {
     FunctionName: "station-orch-dev-cdkDeploy",
     InvokeArgs: Buffer.from(
       JSON.stringify({
         requestId,
+        processId,
         credentials: {
           aws_access_key_id: process.env.OPS_ACCESS_KEY_ID,
           aws_secret_access_key: process.env.OPS_SECRET_ACCESS_KEY,
@@ -35,7 +38,8 @@ module.exports.handler = async event => {
       {
         data: {
           response: respondeCdkDeploy,
-          requestId
+          requestId,
+          processId
         }
       },
       null,

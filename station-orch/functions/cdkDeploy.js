@@ -5,6 +5,7 @@ const { exec, pwd, env } = require("shelljs");
 const fs = require("fs");
 
 module.exports.handler = async event => {
+  const processId = event.processId;
   const requestId = event.requestId;
   const credentials = event.credentials;
   const profileName = requestId;
@@ -32,6 +33,7 @@ EOF"
   fs.writeFileSync(
     "/tmp/cdk.out/station.input.json",
     JSON.stringify({
+      processId,
       profileName,
       requestId,
       account,
