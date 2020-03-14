@@ -37,6 +37,7 @@ provider:
 functions:
   cdkDeploy:
     handler: functions/cdkDeploy.handler
+    timeout: 900
   callCdkDeployAsync:
     handler: functions/callCdkDeployAsync.handler
     events:
