@@ -4,14 +4,18 @@ const AWS = require("aws-sdk");
 const { exec, pwd, env } = require("shelljs");
 
 module.exports.handler = async event => {
+  const requestId = event.requestId;
+  const credentials = event.credentials;
+  const profileName = requestId;
+
   exec(`
-rm -rf /tmp/.aws.default_profile
-mkdir /tmp/.aws.default_profile
-sh -c "cat <<EOF >> /tmp/.aws.default_profile/config
-[profile myprofile]
-aws_access_key_id=${process.env.ACCESS_KEY_ID}
-aws_secret_access_key=${process.env.SECRET_ACCESS_KEY}
-region=us-east-1
+rm -rf /tmp/.aws.${profileName}
+mkdir /tmp/.aws.${profileName}
+sh -c "cat <<EOF >> /tmp/.aws.${profileName}/config
+[profile ${profileName}]
+aws_access_key_id=${credentials.aws_access_key_id}
+aws_secret_access_key=${credentials.aws_secret_access_key}
+region=${credentials.aws_region}
 output=json
 EOF"
   `);

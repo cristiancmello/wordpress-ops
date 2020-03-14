@@ -14,7 +14,12 @@ module.exports.handler = async event => {
     FunctionName: "station-orch-dev-cdkDeploy",
     InvokeArgs: Buffer.from(
       JSON.stringify({
-        requestId
+        requestId,
+        credentials: {
+          aws_access_key_id: process.env.OPS_ACCESS_KEY_ID,
+          aws_secret_access_key: process.env.OPS_SECRET_ACCESS_KEY,
+          aws_region: process.env.OPS_AWS_REGION
+        }
       })
     )
   };
