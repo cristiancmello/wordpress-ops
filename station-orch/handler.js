@@ -17,7 +17,7 @@ EOF"
   `);
 
   const cdkExec = exec(
-    `./node_modules/cdk/bin/cdk deploy -o /tmp/cdk.out --profile myprofile --require-approval never`,
+    `./node_modules/cdk/bin/cdk deploy -o /tmp/cdk.out --plugin cdk-profile-plugin --profile myprofile --require-approval never`,
     { silent: false }
   );
 

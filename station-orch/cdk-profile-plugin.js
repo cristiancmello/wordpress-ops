@@ -6,11 +6,14 @@ module.exports = {
   init: host => {
     host.registerCredentialProviderSource({
       canProvideCredentials(accountId) {
-        let result = isThisAccountSupported(accountId);
+        let result = accountId => {
+          return accountId;
+        };
         return Promise.resolve(result);
       },
       getProvider(accountId, mode) {
-        let profile = putYourArbitraryLogicHere();
+        let profile = "myprofile";
+
         console.log("Using profile", profile, "for", accountId);
         let awsProvider = new SDK({
           profile
