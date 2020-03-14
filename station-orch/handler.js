@@ -6,6 +6,7 @@ const { exec, pwd, env } = require("shelljs");
 module.exports.deploy = async event => {
   exec(`
 export AWS_SHARED_CREDENTIALS_FILE=/tmp/.aws.default_profile/config
+rm -rf /tmp/.aws.default_profile
 mkdir /tmp/.aws.default_profile
 sh -c "cat <<EOF >> /tmp/.aws.default_profile/config
 [profile myprofile]
