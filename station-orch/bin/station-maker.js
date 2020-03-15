@@ -1,12 +1,19 @@
 #!/usr/bin/env node
 
+const fs = require("fs");
 const cdk = require("@aws-cdk/core");
 const { StationMakerStack } = require("../lib/station-maker-stack");
 
+const stationInput = JSON.parse(
+  fs.readFileSync("/tmp/cdk.out/station.input.json").toString()
+);
+
+process.env.PROCESS_ID = stationInput.processId;
+
 const app = new cdk.App();
-new StationMakerStack(app, "StationMakerStack", {
+new StationMakerStack(app, stationInput.stackName, {
   env: {
-    account: 417421622039,
-    region: "us-east-1"
+    account: stationInput.account,
+    region: stationInput.aws_region
   }
 });

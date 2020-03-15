@@ -1,9 +1,14 @@
 const { SDK } = require("aws-cdk/lib/api/util/sdk");
+const fs = require("fs");
 
 module.exports = {
   version: "1",
   name: "cdk-profile-plugin",
   init: host => {
+    const stationInput = JSON.parse(
+      fs.readFileSync("/tmp/cdk.out/station.input.json").toString()
+    );
+
     host.registerCredentialProviderSource({
       canProvideCredentials(accountId) {
         let result = accountId => {
@@ -12,9 +17,7 @@ module.exports = {
         return Promise.resolve(result);
       },
       getProvider(accountId, mode) {
-        let profile = "myprofile";
-
-        console.log("Using profile", profile, "for", accountId);
+        let profile = stationInput.profileName;
         let awsProvider = new SDK({
           profile
         }).credentialsCache.defaultCredentialProvider;

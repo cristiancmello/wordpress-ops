@@ -13,6 +13,8 @@ class StationMakerStack extends cdk.Stack {
   constructor(scope, id, props) {
     super(scope, id, props);
 
+    const processId = process.env.PROCESS_ID;
+
     const defaultVpc = ec2.Vpc.fromLookup(this, "defaultVpc", {
       vpcId: "vpc-6a2c0210"
     });
@@ -21,7 +23,7 @@ class StationMakerStack extends cdk.Stack {
       this,
       "wordpressOpsHostSecurityGroup",
       {
-        groupName: "wordpress-ops-host-sg",
+        groupName: `wordpress-ops-host-sg-${processId}`,
         groupDescription: "WordPress Ops Host SG",
         vpcId: defaultVpc.vpcId,
         securityGroupIngress: [
@@ -41,7 +43,7 @@ class StationMakerStack extends cdk.Stack {
       this,
       "wordpressOpsHostLaunchTemplate",
       {
-        launchTemplateName: "wordpress-ops-host-launchtemplate",
+        launchTemplateName: `wordpress-ops-host-launchtemplate-${processId}`,
         launchTemplateData: {
           capacityReservationSpecification: {
             capacityReservationPreference: "open"
@@ -82,7 +84,7 @@ class StationMakerStack extends cdk.Stack {
         tags: [
           {
             key: "Application",
-            value: "wordpress-ops-host",
+            value: `wordpress-ops-host-${processId}`,
             propagateAtLaunch: true
           },
           {

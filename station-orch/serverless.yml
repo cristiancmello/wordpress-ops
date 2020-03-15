@@ -11,12 +11,13 @@ provider:
   runtime: nodejs12.x
   stage: dev
   region: us-east-1
-  timeout: 30
   environment:
-    CDK_DEFAULT_ACCOUNT: ${ssm:/station_orch/CDK_DEFAULT_ACCOUNT~true}
-    CDK_DEFAULT_REGION: ${ssm:/station_orch/CDK_DEFAULT_REGION~true}
-    ACCESS_KEY_ID: ${ssm:/station_orch/AWS_ACCESS_KEY_ID~true}
-    SECRET_ACCESS_KEY: ${ssm:/station_orch/AWS_SECRET_ACCESS_KEY~true}
+    CDK_DEFAULT_STACK_NAME: StationStack
+    CDK_DEFAULT_ACCOUNT: ${ssm:/station_orch/AWS_ACCOUNT~true}
+    CDK_DEFAULT_REGION: ${ssm:/station_orch/AWS_REGION~true}
+    OPS_ACCESS_KEY_ID: ${ssm:/station_orch/AWS_ACCESS_KEY_ID~true}
+    OPS_SECRET_ACCESS_KEY: ${ssm:/station_orch/AWS_SECRET_ACCESS_KEY~true}
+    OPS_AWS_REGION: ${ssm:/station_orch/AWS_REGION~true}
   iamRoleStatements:
     - Effect: "Allow"
       Action:
@@ -34,12 +35,15 @@ provider:
 #    - exclude-me-dir/**
 
 functions:
-  deploy:
-    handler: handler.deploy
+  cdkDeploy:
+    handler: functions/cdkDeploy.handler
+    timeout: 900
+  callCdkDeployAsync:
+    handler: functions/callCdkDeployAsync.handler
     events:
       - http:
-          path: deploy
-          method: get
+          path: hosts/deploy
+          method: POST
 #      - websocket: $connect
 #      - s3: ${env:BUCKET}
 #      - schedule: rate(10 minutes)
