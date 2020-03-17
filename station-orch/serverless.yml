@@ -102,17 +102,17 @@ resources:
           - AttributeName: email
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
-    # stationsTable:
-    #   Type: AWS::DynamoDB::Table
-    #   Properties:
-    #     TableName: stationsTable
-    #     AttributeDefinitions:
-    #       - AttributeName: stationId
-    #         AttributeType: S
-    #     KeySchema:
-    #       - AttributeName: stationId
-    #         KeyType: HASH
-    #     BillingMode: PAY_PER_REQUEST
+    stations:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: stations
+        AttributeDefinitions:
+          - AttributeName: randomString
+            AttributeType: S
+        KeySchema:
+          - AttributeName: randomString
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
 
 custom:
   dynamodb:
