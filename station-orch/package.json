@@ -17,10 +17,16 @@
     "@aws-cdk/aws-autoscaling": "^1.27.0",
     "@aws-cdk/aws-ec2": "^1.27.0",
     "@aws-cdk/core": "^1.27.0",
+    "@aws/dynamodb-data-mapper": "^0.7.3",
+    "@aws/dynamodb-data-mapper-annotations": "^0.7.3",
     "aws-cdk": "1.27.0",
     "aws-sdk": "^2.639.0",
     "cdk": "^1.27.0",
     "randomstring": "^1.1.5",
-    "shelljs": "^0.8.3"
+    "serverless-dynamodb-client": "^0.0.2",
+    "serverless-dynamodb-local": "^0.2.39",
+    "shelljs": "^0.8.3",
+    "uuid": "^7.0.2",
+    "uuidv4": "^6.0.6"
   }
 }

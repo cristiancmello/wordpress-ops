@@ -8,4 +8,4 @@ script:
     - yarn global add serverless@1.65.0
     - cd station-orch
     - yarn
-    - sls deploy
+    - sls deploy --conceal
