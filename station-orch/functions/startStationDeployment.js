@@ -89,9 +89,9 @@ module.exports.handler = async event => {
       body: JSON.stringify(
         {
           data: {
+            id: startedDeployment.id,
             response: respondeCdkDeploy,
-            requestId,
-            processId: startedDeployment.randomString
+            requestId
           }
         },
         null,
