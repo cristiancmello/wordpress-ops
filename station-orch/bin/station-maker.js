@@ -9,6 +9,7 @@ const stationInput = JSON.parse(
 );
 
 process.env.PROCESS_ID = stationInput.processId;
+process.env.STACK_NAME = stationInput.stackName;
 
 const app = new cdk.App();
 new StationMakerStack(app, stationInput.stackName, {
