@@ -69,7 +69,7 @@ module.exports.handler = async event => {
       InvokeArgs: Buffer.from(
         JSON.stringify({
           requestId,
-          processId: startedDeployment.randomString,
+          deploymentId: startedDeployment.id,
           credentials: {
             aws_access_key_id: process.env.OPS_ACCESS_KEY_ID,
             aws_secret_access_key: process.env.OPS_SECRET_ACCESS_KEY,
@@ -99,12 +99,15 @@ module.exports.handler = async event => {
       )
     };
   } catch (e) {
-    console.log(e);
     return {
       statusCode: 400,
       body: JSON.stringify(
         {
-          errors: []
+          errors: [
+            {
+              detail: e.message
+            }
+          ]
         },
         null,
         2

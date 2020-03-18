@@ -5,7 +5,7 @@ const { exec, pwd, env } = require("shelljs");
 const fs = require("fs");
 
 module.exports.handler = async event => {
-  const processId = event.processId;
+  const deploymentId = event.deploymentId;
   const requestId = event.requestId;
   const credentials = event.credentials;
   const profileName = requestId;
@@ -33,7 +33,7 @@ EOF"
   fs.writeFileSync(
     "/tmp/cdk.out/station.input.json",
     JSON.stringify({
-      processId,
+      deploymentId,
       profileName,
       requestId,
       account,
@@ -46,6 +46,8 @@ EOF"
     `./node_modules/cdk/bin/cdk deploy -o /tmp/cdk.out --plugin cdk-profile-plugin --require-approval never`,
     { silent: false }
   );
+
+  console.log("DEPLOYMENT_ID", deploymentId);
 
   return {};
 };
