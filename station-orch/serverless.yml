@@ -38,12 +38,6 @@ functions:
   cdkDeploy:
     handler: functions/cdkDeploy.handler
     timeout: 900
-  callCdkDeployAsync:
-    handler: functions/callCdkDeployAsync.handler
-    events:
-      - http:
-          path: hosts/deploy
-          method: POST
   createUser:
     handler: functions/createUser.handler
     events:
