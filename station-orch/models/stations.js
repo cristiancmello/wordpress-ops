@@ -13,7 +13,7 @@ class Station {
 }
 
 const randomString = () => {
-  return randomstring.generate(7);
+  return `cfstack-${randomstring.generate(7)}`;
 };
 
 Object.defineProperties(Station.prototype, {
