@@ -172,7 +172,7 @@ module.exports.handler = async event => {
     cdkDeploymentProcessEvent: "PROCESSING"
   });
 
-  const cdkDeploy = exec(cdkDeployCommandExpression, {
+  const cdkDeploy = shell.exec(cdkDeployCommandExpression, {
     silent: false,
     async: false
   });
