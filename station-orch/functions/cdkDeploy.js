@@ -164,28 +164,22 @@ module.exports.handler = async event => {
     cdkDeployArgs = `-o ${cdkOutputPath} --plugin ../../../cdk-profile-plugin --require-approval never`,
     cdkDeployCommandExpression = `${cdkDeployCommand} ${cdkDeployArgs}`;
 
-  const cdkDeploy = exec(
-    cdkDeployCommandExpression,
-    {
-      silent: true,
-      async: true
-    },
-    async (code, stdout, stderr) => {
-      station = await syncStation(station, {
-        cfStackArn: stdout.trim()
-      });
+  deployment = await syncDeployment(deployment, {
+    cdkDeploymentProcessEvent: "PROCESSING"
+  });
 
-      deployment = await syncDeployment(deployment, {
-        cdkDeployProcessStatus: code,
-        cdkDeploymentProcessEvent: "TERMINATED"
-      });
-    }
-  );
+  const cdkDeploy = exec(cdkDeployCommandExpression, {
+    silent: true,
+    async: false
+  });
 
-  cdkDeploy.stderr.on("data", async data => {
-    deployment = await syncDeployment(deployment, {
-      cdkDeploymentProcessEvent: "PROCESSING"
-    });
+  station = await syncStation(station, {
+    cfStackArn: cdkDeploy.stdout.trim()
+  });
+
+  deployment = await syncDeployment(deployment, {
+    cdkDeployProcessStatus: cdkDeploy.code,
+    cdkDeploymentProcessEvent: "TERMINATED"
   });
 
   return {};
