@@ -35,7 +35,9 @@ class StationMakerStack extends cdk.Stack {
       }
     );
 
-    let entrypointFile = fs.readFileSync("wordpress-ops-host-entrypoint.sh");
+    let entrypointFile = fs.readFileSync(
+      `${__dirname}/../wordpress-ops-host-entrypoint.sh`
+    );
 
     const wordpressOpsHostLaunchTemplate = new ec2.CfnLaunchTemplate(
       this,

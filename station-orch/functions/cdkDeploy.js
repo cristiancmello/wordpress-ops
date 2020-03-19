@@ -159,10 +159,10 @@ module.exports.handler = async event => {
 
   const cdkOutputPath = getCdkOutputPath();
 
-  shell.ls();
-  shell.pwd();
-  shell.cd("/tmp");
-  shell.pwd();
+  console.log(shell.ls().stdout);
+  console.log(shell.pwd().stdout);
+  console.log(shell.cd("/tmp").stdout);
+  console.log(shell.pwd().stdout);
 
   // ~/workspaces/wordpress-ops/station-maker/node_modules/cdk/bin/cdk deploy --app ~/workspaces/wordpress-ops/station-maker/bin/station-maker.js
 
