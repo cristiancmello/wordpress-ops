@@ -169,7 +169,7 @@ module.exports.handler = async event => {
   });
 
   const cdkDeploy = exec(cdkDeployCommandExpression, {
-    silent: true,
+    silent: false,
     async: false
   });
 
