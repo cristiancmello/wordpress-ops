@@ -8,17 +8,13 @@ const randomstring = require("randomstring");
 
 const uuid = require("uuid");
 
-class Station {
+class Deployment {
   constructor() {}
 }
 
-const randomString = () => {
-  return randomstring.generate(7);
-};
-
-Object.defineProperties(Station.prototype, {
+Object.defineProperties(Deployment.prototype, {
   [DynamoDbTable]: {
-    value: "stations"
+    value: "deployments"
   },
   [DynamoDbSchema]: {
     value: {
@@ -30,16 +26,18 @@ Object.defineProperties(Station.prototype, {
         type: "String",
         keyType: "HASH"
       },
-      randomString: {
+      stationId: {
         type: "String",
-        keyType: "HASH",
-        defaultProvider: randomString
+        keyType: "HASH"
       },
-      cfStackArn: {
+      cdkDeployProcessStatus: {
+        type: "String"
+      },
+      cdkDeploymentProcessEvent: {
         type: "String"
       }
     }
   }
 });
 
-module.exports = Station;
+module.exports = Deployment;

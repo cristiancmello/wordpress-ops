@@ -38,12 +38,6 @@ functions:
   cdkDeploy:
     handler: functions/cdkDeploy.handler
     timeout: 900
-  callCdkDeployAsync:
-    handler: functions/callCdkDeployAsync.handler
-    events:
-      - http:
-          path: hosts/deploy
-          method: POST
   createUser:
     handler: functions/createUser.handler
     events:
@@ -56,6 +50,13 @@ functions:
       - http:
           path: stations
           method: POST
+  startStationDeployment:
+    handler: functions/startStationDeployment.handler
+    events:
+      - http:
+          path: stations/deployments
+          method: POST
+          
 #      - websocket: $connect
 #      - s3: ${env:BUCKET}
 #      - schedule: rate(10 minutes)
@@ -96,10 +97,10 @@ resources:
       Properties:
         TableName: users
         AttributeDefinitions:
-          - AttributeName: email
+          - AttributeName: id
             AttributeType: S
         KeySchema:
-          - AttributeName: email
+          - AttributeName: id
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
     stations:
@@ -111,6 +112,17 @@ resources:
             AttributeType: S
         KeySchema:
           - AttributeName: randomString
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+    deployments:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: deployments
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
 

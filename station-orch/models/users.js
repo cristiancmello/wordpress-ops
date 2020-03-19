@@ -16,10 +16,13 @@ Object.defineProperties(User.prototype, {
   },
   [DynamoDbSchema]: {
     value: {
-      id: { type: "String", defaultProvider: uuid.v4 },
-      email: {
+      id: {
         type: "String",
+        defaultProvider: uuid.v4,
         keyType: "HASH"
+      },
+      email: {
+        type: "String"
       },
       name: { type: "String" }
     }
