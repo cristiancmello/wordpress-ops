@@ -11,3 +11,6 @@ cdk.out
 
 # Dynamodb local files
 .dynamodb
+
+# AWS CDK files
+cdk.context.json
