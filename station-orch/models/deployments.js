@@ -29,6 +29,12 @@ Object.defineProperties(Deployment.prototype, {
       stationId: {
         type: "String",
         keyType: "HASH"
+      },
+      cdkDeployProcessStatus: {
+        type: "String"
+      },
+      cdkDeploymentProcessEvent: {
+        type: "String"
       }
     }
   }
