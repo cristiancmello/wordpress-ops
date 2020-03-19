@@ -29,7 +29,7 @@ const getCdkStationInputFilePath = () => {
 };
 
 const getCdkBinFilePath = () => {
-  return `./var/task/node_modules/cdk/bin/cdk`;
+  return `/var/task/node_modules/.bin/cdk`;
 };
 
 const generateAwsProfileConfig = (
