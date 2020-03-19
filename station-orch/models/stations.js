@@ -34,6 +34,9 @@ Object.defineProperties(Station.prototype, {
         type: "String",
         keyType: "HASH",
         defaultProvider: randomString
+      },
+      cfStackArn: {
+        type: "String"
       }
     }
   }
