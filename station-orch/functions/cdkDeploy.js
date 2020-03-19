@@ -29,7 +29,7 @@ const getCdkStationInputFilePath = () => {
 };
 
 const getCdkBinFilePath = () => {
-  return `./node_modules/cdk/bin/cdk`;
+  return `./var/task/node_modules/cdk/bin/cdk`;
 };
 
 const generateAwsProfileConfig = (
@@ -159,35 +159,32 @@ module.exports.handler = async event => {
 
   const cdkOutputPath = getCdkOutputPath();
 
-  console.log(shell.ls().stdout);
-  console.log(shell.pwd().stdout);
-  console.log(shell.cd("/tmp").stdout);
-  console.log(shell.pwd().stdout);
+  shell.cd("/tmp");
 
   // ~/workspaces/wordpress-ops/station-maker/node_modules/cdk/bin/cdk deploy --app ~/workspaces/wordpress-ops/station-maker/bin/station-maker.js
 
-  // const cdkBinFilePath = getCdkBinFilePath(),
-  //   cdkDeployCommand = `${cdkBinFilePath} deploy`,
-  //   cdkDeployArgs = `-o ${cdkOutputPath} --plugin ../../../cdk-profile-plugin --require-approval never`,
-  //   cdkDeployCommandExpression = `${cdkDeployCommand} ${cdkDeployArgs}`;
+  const cdkBinFilePath = getCdkBinFilePath(),
+    cdkDeployCommand = `${cdkBinFilePath} deploy`,
+    cdkDeployArgs = `-o ${cdkOutputPath} --app /var/task/bin/station-maker.js --plugin /var/task/cdk-profile-plugin --require-approval never`,
+    cdkDeployCommandExpression = `${cdkDeployCommand} ${cdkDeployArgs}`;
 
-  // deployment = await syncDeployment(deployment, {
-  //   cdkDeploymentProcessEvent: "PROCESSING"
-  // });
+  deployment = await syncDeployment(deployment, {
+    cdkDeploymentProcessEvent: "PROCESSING"
+  });
 
-  // const cdkDeploy = exec(cdkDeployCommandExpression, {
-  //   silent: false,
-  //   async: false
-  // });
+  const cdkDeploy = exec(cdkDeployCommandExpression, {
+    silent: false,
+    async: false
+  });
 
-  // station = await syncStation(station, {
-  //   cfStackArn: cdkDeploy.stdout.trim()
-  // });
+  station = await syncStation(station, {
+    cfStackArn: cdkDeploy.stdout.trim()
+  });
 
-  // deployment = await syncDeployment(deployment, {
-  //   cdkDeployProcessStatus: cdkDeploy.code,
-  //   cdkDeploymentProcessEvent: "TERMINATED"
-  // });
+  deployment = await syncDeployment(deployment, {
+    cdkDeployProcessStatus: cdkDeploy.code,
+    cdkDeploymentProcessEvent: "TERMINATED"
+  });
 
   return {};
 };
