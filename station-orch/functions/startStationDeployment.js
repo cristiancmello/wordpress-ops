@@ -1,7 +1,12 @@
 "use strict";
 
 const AWS = require("aws-sdk");
+// const lambda = new AWS.Lambda({
+//   endpoint: "http://localhost:3002"
+// });
+
 const lambda = new AWS.Lambda();
+
 const Deployment = require("../models/deployments");
 const User = require("../models/users");
 const Station = require("../models/stations");
