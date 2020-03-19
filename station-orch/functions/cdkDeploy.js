@@ -1,7 +1,7 @@
 "use strict";
 
 const fs = require("fs");
-const { exec } = require("shelljs");
+const shell = require("shelljs");
 
 const AWS = require("aws-sdk");
 
@@ -159,28 +159,35 @@ module.exports.handler = async event => {
 
   const cdkOutputPath = getCdkOutputPath();
 
-  const cdkBinFilePath = getCdkBinFilePath(),
-    cdkDeployCommand = `${cdkBinFilePath} deploy`,
-    cdkDeployArgs = `-o ${cdkOutputPath} --plugin ../../../cdk-profile-plugin --require-approval never`,
-    cdkDeployCommandExpression = `${cdkDeployCommand} ${cdkDeployArgs}`;
+  shell.ls();
+  shell.pwd();
+  shell.cd("/tmp");
+  shell.pwd();
 
-  deployment = await syncDeployment(deployment, {
-    cdkDeploymentProcessEvent: "PROCESSING"
-  });
+  // ~/workspaces/wordpress-ops/station-maker/node_modules/cdk/bin/cdk deploy --app ~/workspaces/wordpress-ops/station-maker/bin/station-maker.js
 
-  const cdkDeploy = exec(cdkDeployCommandExpression, {
-    silent: false,
-    async: false
-  });
+  // const cdkBinFilePath = getCdkBinFilePath(),
+  //   cdkDeployCommand = `${cdkBinFilePath} deploy`,
+  //   cdkDeployArgs = `-o ${cdkOutputPath} --plugin ../../../cdk-profile-plugin --require-approval never`,
+  //   cdkDeployCommandExpression = `${cdkDeployCommand} ${cdkDeployArgs}`;
 
-  station = await syncStation(station, {
-    cfStackArn: cdkDeploy.stdout.trim()
-  });
+  // deployment = await syncDeployment(deployment, {
+  //   cdkDeploymentProcessEvent: "PROCESSING"
+  // });
 
-  deployment = await syncDeployment(deployment, {
-    cdkDeployProcessStatus: cdkDeploy.code,
-    cdkDeploymentProcessEvent: "TERMINATED"
-  });
+  // const cdkDeploy = exec(cdkDeployCommandExpression, {
+  //   silent: false,
+  //   async: false
+  // });
+
+  // station = await syncStation(station, {
+  //   cfStackArn: cdkDeploy.stdout.trim()
+  // });
+
+  // deployment = await syncDeployment(deployment, {
+  //   cdkDeployProcessStatus: cdkDeploy.code,
+  //   cdkDeploymentProcessEvent: "TERMINATED"
+  // });
 
   return {};
 };
