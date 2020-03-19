@@ -41,7 +41,7 @@ const generateAwsProfileConfig = (
   const awsProfileConfigFilePath = getAwsProfileConfigFilePath(profileName);
   const cdkOutputPath = getCdkOutputPath();
 
-  exec(`
+  shell.exec(`
 rm -rf ${awsProfileConfigFilePath}
 mkdir ${awsProfileConfigFilePath}
 rm -rf ${cdkOutputPath}
