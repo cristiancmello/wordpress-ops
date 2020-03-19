@@ -23,13 +23,18 @@ const getCdkOutputPath = () => {
   return `/tmp/cdk.out`;
 };
 
+const getDefaultWorkdir = () => {
+  return `/var/task`;
+}
+
 const getCdkStationInputFilePath = () => {
   const cdkOutputPath = getCdkOutputPath();
   return `${cdkOutputPath}/station.input.json`;
 };
 
 const getCdkBinFilePath = () => {
-  return `/var/task/node_modules/.bin/cdk`;
+  const defaultWorkdir = getDefaultWorkdir()
+  return `${defaultWorkdir}/node_modules/cdk/bin/cdk`;
 };
 
 const generateAwsProfileConfig = (
@@ -157,15 +162,15 @@ module.exports.handler = async event => {
   let deployment = await findFirstDeploymentById(deploymentId);
   let station = await findFirstStationById(deployment.stationId);
 
-  const cdkOutputPath = getCdkOutputPath();
+  const cdkOutputPath = getCdkOutputPath(),
+    defaultWorkdir = getDefaultWorkdir();
 
+  // Access tmp folder as workdir (AWS Lambda enable '/tmp' to read/write)
   shell.cd("/tmp");
-
-  // ~/workspaces/wordpress-ops/station-maker/node_modules/cdk/bin/cdk deploy --app ~/workspaces/wordpress-ops/station-maker/bin/station-maker.js
 
   const cdkBinFilePath = getCdkBinFilePath(),
     cdkDeployCommand = `${cdkBinFilePath} deploy`,
-    cdkDeployArgs = `-o ${cdkOutputPath} --app /var/task/bin/station-maker.js --plugin /var/task/cdk-profile-plugin --require-approval never`,
+    cdkDeployArgs = `-o ${cdkOutputPath} --app ${defaultWorkdir}/bin/station-maker.js --plugin ${defaultWorkdir}/cdk-profile-plugin --require-approval never`,
     cdkDeployCommandExpression = `${cdkDeployCommand} ${cdkDeployArgs}`;
 
   deployment = await syncDeployment(deployment, {
