@@ -1,11 +1,10 @@
 "use strict";
 
 const AWS = require("aws-sdk");
-// const lambda = new AWS.Lambda({
-//   endpoint: "http://localhost:3002"
-// });
 
-const lambda = new AWS.Lambda();
+const lambda = new AWS.Lambda({
+  endpoint: process.env.LAMBDA_ENDPOINT
+});
 
 const Deployment = require("../models/deployments");
 const User = require("../models/users");
@@ -14,19 +13,20 @@ const { DataMapper } = require("@aws/dynamodb-data-mapper");
 const DynamoDB = require("aws-sdk/clients/dynamodb");
 const { equals } = require("@aws/dynamodb-expressions");
 
-const client = new DynamoDB({ region: "us-east-1" });
+const client = new DynamoDB({ region: process.env.DYNAMODB_REGION });
 const mapper = new DataMapper({ client });
 
 const callCdkDeployLambda = params => {
   return lambda.invokeAsync(params).promise();
 };
 
-const startDeployment = async (attributes, relationships) => {
+const startDeployment = async (attributes, relations) => {
   try {
     const deployment = new Deployment();
 
-    deployment.userId = relationships.user.data.id;
-    deployment.stationId = relationships.station.data.id;
+    deployment.userId = relations.user.data.id;
+    deployment.stationId = relations.station.data.id;
+    deployment.properties = JSON.stringify(attributes.properties);
 
     const createDeploymentPromise = mapper.put({ item: deployment });
     return createDeploymentPromise;
@@ -39,14 +39,15 @@ module.exports.handler = async event => {
   try {
     const input = JSON.parse(event.body);
     const inputAttributes = input.data.attributes;
-    const inputRelationships = input.data.relationships;
+    const inputRelations = input.data.relationships;
     const requestId = event.requestContext.requestId;
+    const properties = inputAttributes.properties;
 
     const user = new User();
     const station = new Station();
 
-    user.id = inputRelationships.user.data.id;
-    station.id = inputRelationships.station.data.id;
+    user.id = inputRelations.user.data.id;
+    station.id = inputRelations.station.data.id;
 
     const stations = mapper.scan(Station, {
       limit: 1,
@@ -66,11 +67,11 @@ module.exports.handler = async event => {
 
     const startedDeployment = await startDeployment(
       inputAttributes,
-      inputRelationships
+      inputRelations
     );
 
     const params = {
-      FunctionName: "station-orch-dev-cdkDeploy",
+      FunctionName: process.env.LAMBDA_FN_CDK_DEPLOY,
       InvokeArgs: Buffer.from(
         JSON.stringify({
           requestId,
@@ -81,7 +82,8 @@ module.exports.handler = async event => {
             aws_region: process.env.OPS_AWS_REGION,
             account: process.env.CDK_DEFAULT_ACCOUNT
           },
-          stackName: foundStation.randomString
+          stackName: foundStation.randomString,
+          properties
         })
       )
     };
@@ -94,7 +96,7 @@ module.exports.handler = async event => {
       body: JSON.stringify(
         {
           data: {
-            id: startedDeployment.id,
+            ...startedDeployment,
             response: respondeCdkDeploy,
             requestId
           }
