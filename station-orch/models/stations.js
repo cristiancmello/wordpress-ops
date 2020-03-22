@@ -30,6 +30,9 @@ Object.defineProperties(Station.prototype, {
         type: "String",
         keyType: "HASH"
       },
+      profileId: {
+        type: "String"
+      },
       randomString: {
         type: "String",
         keyType: "HASH",
