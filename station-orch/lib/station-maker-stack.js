@@ -1,7 +1,8 @@
+const fs = require("fs");
 const cdk = require("@aws-cdk/core");
 const ec2 = require("@aws-cdk/aws-ec2");
 const autoscaling = require("@aws-cdk/aws-autoscaling");
-const fs = require("fs");
+const { stationInput } = require("../bin/loadStationInput");
 
 class StationMakerStack extends cdk.Stack {
   /**
@@ -69,13 +70,29 @@ class StationMakerStack extends cdk.Stack {
       }
     );
 
+    let hostAction = stationInput.properties.action.host;
+
+    let hostAsgInstanceSpecs = {};
+
+    if (hostAction.name === "start") {
+      hostAsgInstanceSpecs = {
+        desiredCapacity: "1",
+        minSize: "1",
+        maxSize: "1"
+      };
+    } else {
+      hostAsgInstanceSpecs = {
+        desiredCapacity: "0",
+        minSize: "0",
+        maxSize: "0"
+      };
+    }
+
     const autoScalingGroup = new autoscaling.CfnAutoScalingGroup(
       this,
       "wordpressOpsHostAutoscaling",
       {
-        desiredCapacity: "0",
-        minSize: "0",
-        maxSize: "0",
+        ...hostAsgInstanceSpecs,
         launchTemplate: {
           launchTemplateId: wordpressOpsHostLaunchTemplate.ref,
           version: wordpressOpsHostLaunchTemplate.attrLatestVersionNumber
