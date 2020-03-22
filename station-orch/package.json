@@ -7,7 +7,8 @@
   "scripts": {
     "build": "echo \"The build step is not required when using JavaScript!\" && exit 0",
     "cdk": "cdk",
-    "test": "jest"
+    "test": "jest",
+    "offline": "sls offline start --stage local"
   },
   "devDependencies": {
     "jest": "^24.9.0",
