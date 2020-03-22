@@ -1,14 +1,11 @@
 const { SDK } = require("aws-cdk/lib/api/util/sdk");
 const fs = require("fs");
+const { stationInput } = require("./bin/loadStationInput");
 
 module.exports = {
   version: "1",
   name: "cdk-profile-plugin",
   init: host => {
-    const stationInput = JSON.parse(
-      fs.readFileSync("/tmp/cdk.out/station.input.json").toString()
-    );
-
     host.registerCredentialProviderSource({
       canProvideCredentials(accountId) {
         let result = accountId => {
