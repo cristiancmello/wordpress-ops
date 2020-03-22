@@ -35,6 +35,9 @@ Object.defineProperties(Deployment.prototype, {
       },
       cdkDeploymentProcessEvent: {
         type: "String"
+      },
+      properties: {
+        type: "String"
       }
     }
   }
