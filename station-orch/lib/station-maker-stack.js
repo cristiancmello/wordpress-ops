@@ -70,7 +70,7 @@ class StationMakerStack extends cdk.Stack {
       }
     );
 
-    let hostAction = stationInput.properties.action.host;
+    let hostAction = stationInput.state.action.host;
 
     let hostAsgInstanceSpecs = {};
 

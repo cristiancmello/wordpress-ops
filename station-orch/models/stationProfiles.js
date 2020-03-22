@@ -33,7 +33,7 @@ Object.defineProperties(StationProfile.prototype, {
       privateDescription: {
         type: "String"
       },
-      properties: {
+      state: {
         type: "String"
       }
     }

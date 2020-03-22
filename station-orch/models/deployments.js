@@ -36,7 +36,7 @@ Object.defineProperties(Deployment.prototype, {
       cdkDeploymentProcessEvent: {
         type: "String"
       },
-      properties: {
+      state: {
         type: "String"
       }
     }

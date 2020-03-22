@@ -16,7 +16,7 @@ const createStationProfile = async (attributes, relations) => {
     stationProfile.privateName = attributes.privateName;
     stationProfile.publicDescription = attributes.publicDescription;
     stationProfile.privateDescription = attributes.privateDescription;
-    stationProfile.properties = JSON.stringify(attributes.properties);
+    stationProfile.state = JSON.stringify(attributes.state);
 
     const createStationProfilePromise = mapper.put({ item: stationProfile });
     return createStationProfilePromise;

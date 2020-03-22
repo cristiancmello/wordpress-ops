@@ -26,7 +26,7 @@ const startDeployment = async (attributes, relations) => {
 
     deployment.userId = relations.user.data.id;
     deployment.stationId = relations.station.data.id;
-    deployment.properties = JSON.stringify(attributes.properties);
+    deployment.state = JSON.stringify(attributes.state);
 
     const createDeploymentPromise = mapper.put({ item: deployment });
     return createDeploymentPromise;
@@ -41,7 +41,7 @@ module.exports.handler = async event => {
     const inputAttributes = input.data.attributes;
     const inputRelations = input.data.relationships;
     const requestId = event.requestContext.requestId;
-    const properties = inputAttributes.properties;
+    const state = inputAttributes.state;
 
     const user = new User();
     const station = new Station();
@@ -83,7 +83,7 @@ module.exports.handler = async event => {
             account: process.env.CDK_DEFAULT_ACCOUNT
           },
           stackName: foundStation.randomString,
-          properties
+          state
         })
       )
     };

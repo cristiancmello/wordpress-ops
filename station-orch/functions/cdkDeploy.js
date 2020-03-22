@@ -91,7 +91,7 @@ const generateStationInputFile = (
   account,
   aws_region,
   stackName,
-  properties
+  state
 ) => {
   const cdkStationInputFilePath = getCdkStationInputFilePath();
 
@@ -103,7 +103,7 @@ const generateStationInputFile = (
       account,
       aws_region,
       stackName,
-      properties
+      state
     })
   );
 };
@@ -161,7 +161,7 @@ const syncStation = async (station, attrs) => {
 };
 
 module.exports.handler = async event => {
-  const { deploymentId, requestId, credentials, stackName, properties } = event;
+  const { deploymentId, requestId, credentials, stackName, state } = event;
   const {
     account,
     aws_region,
@@ -182,7 +182,7 @@ module.exports.handler = async event => {
     account,
     aws_region,
     stackName,
-    properties
+    state
   );
 
   let deployment = await findFirstDeploymentById(deploymentId);
