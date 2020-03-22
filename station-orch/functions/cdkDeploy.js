@@ -16,16 +16,28 @@ const client = new DynamoDB({ region: "us-east-1" });
 const mapper = new DataMapper({ client });
 
 const getAwsProfileConfigFilePath = profileName => {
-  return `/tmp/.aws.${profileName}`;
+  let path = `/tmp/.aws.${profileName}`;
+
+  if (process.env.APP_ENV === "local") {
+    path = `credentials`;
+  }
+
+  return path;
 };
 
 const getCdkOutputPath = () => {
-  return `/tmp/cdk.out`;
+  let path = `/tmp/cdk.out`;
+
+  if (process.env.APP_ENV === "local") {
+    path = "cdk.out";
+  }
+
+  return path;
 };
 
 const getDefaultWorkdir = () => {
-  return `/var/task`;
-}
+  return process.env.CDK_DEFAULT_WORKDIR;
+};
 
 const getCdkStationInputFilePath = () => {
   const cdkOutputPath = getCdkOutputPath();
@@ -33,8 +45,19 @@ const getCdkStationInputFilePath = () => {
 };
 
 const getCdkBinFilePath = () => {
-  const defaultWorkdir = getDefaultWorkdir()
+  const defaultWorkdir = getDefaultWorkdir();
   return `${defaultWorkdir}/node_modules/cdk/bin/cdk`;
+};
+
+const getCdkProfilePluginPath = () => {
+  const defaultWorkdir = getDefaultWorkdir();
+  let path = `${defaultWorkdir}/cdk-profile-plugin`;
+
+  if (process.env.APP_ENV === "local") {
+    path = `../../../cdk-profile-plugin`;
+  }
+
+  return path;
 };
 
 const generateAwsProfileConfig = (
@@ -67,7 +90,8 @@ const generateStationInputFile = (
   requestId,
   account,
   aws_region,
-  stackName
+  stackName,
+  properties
 ) => {
   const cdkStationInputFilePath = getCdkStationInputFilePath();
 
@@ -78,7 +102,8 @@ const generateStationInputFile = (
       requestId,
       account,
       aws_region,
-      stackName
+      stackName,
+      properties
     })
   );
 };
@@ -136,7 +161,7 @@ const syncStation = async (station, attrs) => {
 };
 
 module.exports.handler = async event => {
-  const { deploymentId, requestId, credentials, stackName } = event;
+  const { deploymentId, requestId, credentials, stackName, properties } = event;
   const {
     account,
     aws_region,
@@ -156,7 +181,8 @@ module.exports.handler = async event => {
     requestId,
     account,
     aws_region,
-    stackName
+    stackName,
+    properties
   );
 
   let deployment = await findFirstDeploymentById(deploymentId);
@@ -165,12 +191,16 @@ module.exports.handler = async event => {
   const cdkOutputPath = getCdkOutputPath(),
     defaultWorkdir = getDefaultWorkdir();
 
-  // Access tmp folder as workdir (AWS Lambda enable '/tmp' to read/write)
-  shell.cd("/tmp");
+  if (process.env.APP_ENV === "dev") {
+    // Access tmp folder as workdir (AWS Lambda enable '/tmp' to read/write)
+    shell.cd("/tmp");
+  }
+
+  const cdkProfilePlugin = getCdkProfilePluginPath();
 
   const cdkBinFilePath = getCdkBinFilePath(),
     cdkDeployCommand = `${cdkBinFilePath} deploy`,
-    cdkDeployArgs = `-o ${cdkOutputPath} --app ${defaultWorkdir}/bin/station-maker.js --plugin ${defaultWorkdir}/cdk-profile-plugin --require-approval never`,
+    cdkDeployArgs = `-o ${cdkOutputPath} --app ${defaultWorkdir}/bin/station-maker.js --plugin ${cdkProfilePlugin} --require-approval never`,
     cdkDeployCommandExpression = `${cdkDeployCommand} ${cdkDeployArgs}`;
 
   deployment = await syncDeployment(deployment, {
