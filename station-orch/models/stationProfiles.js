@@ -4,36 +4,33 @@ const {
   embed
 } = require("@aws/dynamodb-data-mapper");
 
-const randomstring = require("randomstring");
-
 const uuid = require("uuid");
 
-class Deployment {
+class StationProfile {
   constructor() {}
 }
 
-Object.defineProperties(Deployment.prototype, {
+Object.defineProperties(StationProfile.prototype, {
   [DynamoDbTable]: {
-    value: "deployments"
+    value: "stationProfiles"
   },
   [DynamoDbSchema]: {
     value: {
       id: {
         type: "String",
+        keyType: "HASH",
         defaultProvider: uuid.v4
       },
-      userId: {
-        type: "String",
-        keyType: "HASH"
-      },
-      stationId: {
-        type: "String",
-        keyType: "HASH"
-      },
-      cdkDeployProcessStatus: {
+      version: {
         type: "String"
       },
-      cdkDeploymentProcessEvent: {
+      publicName: {
+        type: "String"
+      },
+      privateName: {
+        type: "String"
+      },
+      privateDescription: {
         type: "String"
       },
       state: {
@@ -43,4 +40,4 @@ Object.defineProperties(Deployment.prototype, {
   }
 });
 
-module.exports = Deployment;
+module.exports = StationProfile;

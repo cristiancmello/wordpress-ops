@@ -13,6 +13,7 @@ const createStation = async (attributes, relations) => {
 
   try {
     station.userId = relations.user.data.id;
+    station.profileId = relations.profile.data.id;
     const createStationPromise = mapper.put({ item: station });
 
     return createStationPromise;
