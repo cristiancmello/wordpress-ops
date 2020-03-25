@@ -86,6 +86,16 @@ functions:
       - http:
           path: stations/deployments
           method: POST
+  getInstances:
+    handler: functions/getInstances.handler
+    events:
+      - http:
+          path: stations/{id}/instances
+          method: GET
+          request:
+            parameters:
+              paths:
+                id: true
 
 resources:
   Resources:
