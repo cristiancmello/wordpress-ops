@@ -5,9 +5,16 @@ jspm_packages
 # Serverless directories
 .serverless
 
-REPORT.md
-*.pem
-.envrc
-packer
+# CDK asset staging directory
+.cdk.staging
+cdk.out
 
-secrets
+# Dynamodb local files
+.dynamodb
+
+# AWS CDK files
+cdk.context.json
+
+credentials
+
+.envrc

@@ -1,0 +1,114 @@
+service: ${self:custom.service.name}
+
+frameworkVersion: ">=1.2.0 <2.0.0"
+
+plugins:
+  - serverless-offline
+  - serverless-dynamodb-local
+
+custom:
+  service:
+    name: station-orch
+    region: us-east-1
+    stage: ${opt:stage, 'dev'}
+  defaultCdkWorkdir:
+    local: .
+    dev: /var/task
+  lambdaEndpoint:
+    local: http://localhost:3002
+    dev: https://lambda.us-east-1.amazonaws.com
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: ${self:custom.service.stage}
+  region: ${self:custom.service.region}
+  environment:
+    APP_NAME: ${self:custom.service.name}
+    APP_ENV: ${self:custom.service.stage}
+    APP_REGION: ${self:custom.service.region}
+    LAMBDA_ENDPOINT: ${self:custom.lambdaEndpoint.${self:custom.service.stage}}
+    LAMBDA_FN_CDK_DEPLOY: ${self:custom.service.name}-${self:custom.service.stage}-cdkDeploy
+    DYNAMODB_REGION: ${self:custom.service.region}
+    CDK_DEFAULT_WORKDIR: ${self:custom.defaultCdkWorkdir.${self:custom.service.stage}}
+    CDK_DEFAULT_STACK_NAME: StationStack
+    CDK_DEFAULT_ACCOUNT: ${ssm:/station_orch/AWS_ACCOUNT~true}
+    CDK_DEFAULT_REGION: ${ssm:/station_orch/AWS_REGION~true}
+    OPS_ACCESS_KEY_ID: ${ssm:/station_orch/AWS_ACCESS_KEY_ID~true}
+    OPS_SECRET_ACCESS_KEY: ${ssm:/station_orch/AWS_SECRET_ACCESS_KEY~true}
+    OPS_AWS_REGION: ${ssm:/station_orch/AWS_REGION~true}
+    OPS_DEFAULT_AMI_ID: ${ssm:/host_ami_builder/WORDPRESS_OPS_HOST/LATEST_AMI_ID~true}
+  package:
+    excludeDevDependencies: true
+    exclude:
+      - .git/**
+      - .vscode/**
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "*"
+      Resource:
+        - "*"
+
+functions:
+  cdkDeploy:
+    handler: functions/cdkDeploy.handler
+    timeout: 900
+  app:
+    handler: index.handler
+    events:
+      - http:
+          path: /
+          method: ANY
+          cors: true
+      - http:
+          path: /{proxy+}
+          method: ANY
+          cors: true
+
+resources:
+  Resources:
+    users:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: users
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+    stations:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: stations
+        AttributeDefinitions:
+          - AttributeName: randomString
+            AttributeType: S
+        KeySchema:
+          - AttributeName: randomString
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+    deployments:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: deployments
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+    stationProfiles:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: stationProfiles
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST

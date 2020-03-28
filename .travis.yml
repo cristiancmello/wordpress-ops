@@ -3,9 +3,8 @@ node_js:
   - node
 cache:
   directories:
-    - station-orch/node_modules
+    - node_modules
 script:
     - yarn global add serverless@1.65.0
-    - cd station-orch
     - yarn
     - sls deploy --conceal
