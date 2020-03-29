@@ -37,7 +37,7 @@ provider:
     OPS_ACCESS_KEY_ID: ${ssm:/station_orch/AWS_ACCESS_KEY_ID~true}
     OPS_SECRET_ACCESS_KEY: ${ssm:/station_orch/AWS_SECRET_ACCESS_KEY~true}
     OPS_AWS_REGION: ${ssm:/station_orch/AWS_REGION~true}
-    OPS_DEFAULT_AMI_ID: ${ssm:/host_ami_builder/WORDPRESS_OPS_HOST/LATEST_AMI_ID~true}
+    OPS_DEFAULT_AMI_ID_SSM_PARAMSTORE_NAME: /host_ami_builder/WORDPRESS_OPS_HOST/LATEST_AMI_ID
   package:
     excludeDevDependencies: true
     exclude:
