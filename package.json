@@ -1,0 +1,41 @@
+{
+  "name": "station-orch",
+  "version": "0.1.0",
+  "bin": {
+    "station-maker": "bin/station-maker.js"
+  },
+  "scripts": {
+    "build": "echo \"The build step is not required when using JavaScript!\" && exit 0",
+    "cdk": "cdk",
+    "test": "jest",
+    "offline": "sls offline start --stage local"
+  },
+  "devDependencies": {
+    "jest": "^24.9.0",
+    "serverless-offline": "^6.1.2"
+  },
+  "dependencies": {
+    "@aws-cdk/aws-iam": "^1.27.0",
+    "@aws-cdk/aws-lambda": "^1.27.0",
+    "@aws-cdk/aws-sns-subscriptions": "^1.27.0",
+    "@aws-cdk/aws-autoscaling": "^1.27.0",
+    "@aws-cdk/aws-ec2": "^1.27.0",
+    "@aws-cdk/core": "^1.27.0",
+    "@aws/dynamodb-data-mapper": "^0.7.3",
+    "@aws/dynamodb-data-mapper-annotations": "^0.7.3",
+    "aws-cdk": "1.27.0",
+    "aws-sdk": "^2.639.0",
+    "cdk": "^1.27.0",
+    "consign": "^0.1.6",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "helmet": "^3.22.0",
+    "randomstring": "^1.1.5",
+    "serverless-dynamodb-client": "^0.0.2",
+    "serverless-dynamodb-local": "^0.2.39",
+    "serverless-http": "^2.3.2",
+    "shelljs": "^0.8.3",
+    "uuid": "^7.0.2",
+    "uuidv4": "^6.0.6"
+  }
+}
