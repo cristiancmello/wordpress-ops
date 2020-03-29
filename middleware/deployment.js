@@ -1,4 +1,5 @@
 const AWS = require("aws-sdk");
+const SSM = new AWS.SSM();
 
 const lambda = new AWS.Lambda({
   endpoint: process.env.LAMBDA_ENDPOINT
@@ -14,17 +15,26 @@ module.exports = app => {
 
   this.create = async (req, res, next) => {
     try {
-      const deployment = await Deployment.create(
+      const deploymentPromise = Deployment.create(
         req.body.data.attributes,
         req.body.data.relationships
       );
 
-      const station = await Station.findFirstById(
+      const stationPromise = Station.findFirstById(
         req.body.data.relationships.station.data.id
       );
 
-      const requestId = req.requestContext.requestId;
-      const state = req.body.data.attributes.state;
+      const latestDefaultAmiIdParameterPromise = SSM.getParameter({
+        Name: process.env.OPS_DEFAULT_AMI_ID_SSM_PARAMSTORE_NAME,
+        WithDecryption: true
+      }).promise();
+
+      const requestId = req.requestContext.requestId,
+        state = req.body.data.attributes.state;
+
+      const deployment = await deploymentPromise,
+        station = await stationPromise,
+        latestDefaultAmiIdParameter = await latestDefaultAmiIdParameterPromise;
 
       const invokeArgs = {
         requestId,
@@ -37,7 +47,7 @@ module.exports = app => {
         },
         stackName: station.randomString,
         state,
-        defaultAmiId: process.env.OPS_DEFAULT_AMI_ID
+        defaultAmiId: latestDefaultAmiIdParameter.Parameter.Value
       };
 
       const params = {
