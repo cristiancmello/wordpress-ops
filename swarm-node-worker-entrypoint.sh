@@ -2,22 +2,24 @@
 
 # INSTANCE_PUBLIC_DNS=$(curl https//169.254.169.254/latest/meta-data/public-hostname)
 
+insertSwarmLeaveClusterScript() {
+  sudo sh -c "cat << EOF >> /etc/rc.d/rc0.d/01SWARMleave
+  #!/bin/sh
+
+  docker swarm leave --force
+  EOF"
+
+  sudo chmod +x /etc/rc.d/rc0.d/01SWARMleave
+
+  sudo ln -s /etc/rc.d/rc0.d/01SWARMleave /etc/rc.d/rc6.d/01SWARMleave
+}
+
+insertSwarmLeaveClusterScript
+
 sudo systemctl start rexray
 
-# docker run -d -p 9000:9000 -p 8000:8000 \
-#   --name portainer \
-#   --restart always \
-#   -v /var/run/docker.sock:/var/run/docker.sock \
-#   -v portainer_data:/data portainer/portainer:1.23.2 \
-#   --admin-password '$2y$12$hvIvGRvuzlXnHgeovBVJsOC.o5I7uICedY13P8gvI3VAQ7XvpdYWi' \
-#   -H unix:///var/run/docker.sock
+sleep 10
 
-# sleep 10
-
-# BEARER_TOKEN=$(curl -X POST localhost:9000/api/auth -d "{\"Username\": \"admin\", \"Password\": \"12345678\"}" | jq -r '.jwt')
-
-# curl -v -X PUT localhost:9000/api/endpoints/1 \
-#     -d "{\"PublicURL\": \"${INSTANCE_PUBLIC_DNS}\"}" \
-#     -H "Content-Type: application/json" \
-#     -H "Authorization: Bearer $BEARER_TOKEN" | jq . \
-#     >> output.txt
+docker plugin enable rexray/ebs:latest
+docker plugin enable rexray/s3fs:latest
+docker plugin enable rexray/efs:latest
