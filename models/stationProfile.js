@@ -1,7 +1,7 @@
 const {
   DynamoDbSchema,
   DynamoDbTable,
-  embed
+  embed,
 } = require("@aws/dynamodb-data-mapper");
 
 const express = require("express");
@@ -9,6 +9,7 @@ const app = express();
 
 const { DataMapper } = require("@aws/dynamodb-data-mapper");
 const DynamoDB = require("aws-sdk/clients/dynamodb");
+const { equals } = require("@aws/dynamodb-expressions");
 
 const client = new DynamoDB({ region: "us-east-1" });
 const mapper = new DataMapper({ client });
@@ -17,48 +18,67 @@ const uuid = require("uuid");
 
 class StationProfile {
   constructor() {}
+
+  static findFirstById = async (id) => {
+    const stationProfiles = mapper.scan(this, {
+      limit: 1,
+      filter: {
+        ...equals(id),
+        subject: "id",
+      },
+    });
+
+    const getfirstStationProfile = async (stationProfiles) => {
+      for await (const stationProfile of stationProfiles) {
+        return stationProfile;
+      }
+    };
+
+    const stationProfile = getfirstStationProfile(stationProfiles);
+    return stationProfile;
+  };
 }
 
 Object.defineProperties(StationProfile.prototype, {
   [DynamoDbTable]: {
-    value: "stationProfiles"
+    value: "stationProfiles",
   },
   [DynamoDbSchema]: {
     value: {
       id: {
         type: "String",
         keyType: "HASH",
-        defaultProvider: uuid.v4
+        defaultProvider: uuid.v4,
       },
       version: {
-        type: "String"
+        type: "String",
       },
       publicName: {
-        type: "String"
+        type: "String",
       },
       privateName: {
-        type: "String"
+        type: "String",
       },
       privateDescription: {
-        type: "String"
+        type: "String",
       },
       state: {
-        type: "String"
+        type: "String",
       },
       properties: {
-        type: "String"
-      }
-    }
-  }
+        type: "String",
+      },
+    },
+  },
 });
 
 /**
  * @param {app} app
  */
-module.exports = app => {
-  this.create = async attributes => {
-    const stationProfile = new StationProfile();
+module.exports = (app) => {
+  const stationProfile = new StationProfile();
 
+  this.create = async (attributes) => {
     stationProfile.publicName = attributes.publicName;
     stationProfile.privateName = attributes.privateName;
     stationProfile.publicDescription = attributes.publicDescription;
@@ -68,6 +88,14 @@ module.exports = app => {
 
     const createStationProfilePromise = mapper.put({ item: stationProfile });
     return createStationProfilePromise;
+  };
+
+  this.findFirstById = async (id) => {
+    const firstStationProfile = await StationProfile.findFirstById(id);
+
+    firstStationProfile.properties = JSON.parse(firstStationProfile.properties);
+
+    return firstStationProfile;
   };
 
   return this;
