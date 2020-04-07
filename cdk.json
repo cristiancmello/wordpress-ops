@@ -1,4 +1,0 @@
-{
-  "app": "node bin/station-maker.js",
-  "plugin": ["cdk-profile-plugin.js"]
-}
