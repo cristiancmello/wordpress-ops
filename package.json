@@ -15,6 +15,7 @@
     "serverless-offline": "^6.1.2"
   },
   "dependencies": {
+    "@aws-cdk/aws-cloudfront": "^1.27.0",
     "@aws-cdk/aws-iam": "^1.27.0",
     "@aws-cdk/aws-lambda": "^1.27.0",
     "@aws-cdk/aws-sns-subscriptions": "^1.27.0",
