@@ -61,6 +61,19 @@
     "@aws-cdk/cx-api" "1.31.0"
     constructs "^2.0.0"
 
+"@aws-cdk/aws-cloudfront@^1.27.0":
+  version "1.31.0"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/aws-cloudfront/-/aws-cloudfront-1.31.0.tgz#38b1054935eb6d361b2680f08a2d099197ad9137"
+  integrity sha512-q0JbVdIXV4ies1o8xoLO6rPTQy3bDivjstu6+ydg6h6qnihZqWZ6WBK50OyoScDeaJa02PAZqJJHEeaBPZzMwg==
+  dependencies:
+    "@aws-cdk/aws-certificatemanager" "1.31.0"
+    "@aws-cdk/aws-iam" "1.31.0"
+    "@aws-cdk/aws-kms" "1.31.0"
+    "@aws-cdk/aws-lambda" "1.31.0"
+    "@aws-cdk/aws-s3" "1.31.0"
+    "@aws-cdk/core" "1.31.0"
+    constructs "^2.0.0"
+
 "@aws-cdk/aws-cloudwatch@1.31.0":
   version "1.31.0"
   resolved "https://registry.yarnpkg.com/@aws-cdk/aws-cloudwatch/-/aws-cloudwatch-1.31.0.tgz#543dbf8ce110f9c7b61c30b292c9861cd6474d9a"
