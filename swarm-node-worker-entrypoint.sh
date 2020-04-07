@@ -23,3 +23,5 @@ sleep 10
 docker plugin enable rexray/ebs:latest
 docker plugin enable rexray/s3fs:latest
 docker plugin enable rexray/efs:latest
+
+docker network create --driver overlay --attachable portainer_agent_network

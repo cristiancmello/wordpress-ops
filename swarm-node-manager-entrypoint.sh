@@ -17,16 +17,13 @@ insertSwarmLeaveClusterScript() {
 insertSwarmLeaveClusterScript
 
 sudo systemctl start rexray
-
-docker run -d -p 9000:9000 -p 8000:8000 \
-  --name portainer \
-  --restart always \
-  -v /var/run/docker.sock:/var/run/docker.sock \
-  -v portainer_data:/data portainer/portainer:1.23.2 \
-  --admin-password '$2y$12$hvIvGRvuzlXnHgeovBVJsOC.o5I7uICedY13P8gvI3VAQ7XvpdYWi' \
-  -H unix:///var/run/docker.sock
-
 sleep 10
+
+sudo docker swarm init --advertise-addr eth0
+
+# Installing Portainer Server and Agent
+curl -L https://downloads.portainer.io/portainer-agent-stack.yml -o portainer-agent-stack.yml
+docker stack deploy --compose-file=portainer-agent-stack.yml portainer
 
 docker plugin enable rexray/ebs:latest
 docker plugin enable rexray/s3fs:latest
