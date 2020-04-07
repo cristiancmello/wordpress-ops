@@ -50,7 +50,7 @@ const getCdkProfilePluginPath = () => {
   let path = `${defaultWorkdir}/cdk-profile-plugin`;
 
   if (process.env.APP_ENV === "local") {
-    path = `../../../../../cdk-plugins/cdk-profile-plugin`;
+    path = `../../../cdk-plugins/cdk-profile-plugin`;
   }
 
   return path;
@@ -97,45 +97,60 @@ const generateStationInputFile = (event) => {
 };
 
 module.exports.handler = async (event) => {
-  generateAwsProfileConfig(event);
-  const stationInput = generateStationInputFile(event);
+  let deployment = null,
+    cdkDeploy = null,
+    station = null,
+    stationInput = null,
+    stationProfile = null;
 
-  let deployment = await Deployment().findFirstById(stationInput.deploymentId);
-  let station = await Station().findFirstById(deployment.stationId);
-  let stationProfile = await StationProfile().findFirstById(station.profileId);
+  try {
+    generateAwsProfileConfig(event);
+    stationInput = generateStationInputFile(event);
 
-  const cdkOutputPath = getCdkOutputPath(),
-    appPath = getCdkAppPath(stationProfile.properties.cdkAppName);
+    deployment = await Deployment().findFirstById(stationInput.deploymentId);
+    station = await Station().findFirstById(deployment.stationId);
+    stationProfile = await StationProfile().findFirstById(station.profileId);
 
-  if (process.env.APP_ENV === "dev") {
-    // Access tmp folder as workdir (AWS Lambda enable '/tmp' to read/write)
-    shell.cd("/tmp");
+    const cdkOutputPath = getCdkOutputPath(),
+      appPath = getCdkAppPath(stationProfile.properties.cdkAppName);
+
+    if (process.env.APP_ENV === "dev") {
+      // Access tmp folder as workdir (AWS Lambda enable '/tmp' to read/write)
+      shell.cd("/tmp");
+    }
+
+    const cdkProfilePlugin = getCdkProfilePluginPath();
+
+    const cdkBinFilePath = getCdkBinFilePath(),
+      cdkDeployCommand = `${cdkBinFilePath} deploy`,
+      cdkDeployArgs = `-o ${cdkOutputPath} --app ${appPath} --plugin ${cdkProfilePlugin} --require-approval never`,
+      cdkDeployCommandExpression = `${cdkDeployCommand} ${cdkDeployArgs}`;
+
+    deployment = await Deployment().sync(deployment, {
+      cdkDeploymentProcessEvent: "PROCESSING",
+    });
+
+    cdkDeploy = shell.exec(cdkDeployCommandExpression, {
+      silent: false,
+      async: false,
+    });
+
+    station = await Station().sync(station, {
+      cfStackArn: cdkDeploy.stdout.trim(),
+    });
+
+    let cdkDeploymentProcessEvent =
+      cdkDeploy.code == 1 ? "ERROR" : "TERMINATED";
+
+    deployment = await Deployment().sync(deployment, {
+      cdkDeployProcessStatus: cdkDeploy.code,
+      cdkDeploymentProcessEvent,
+    });
+  } catch (error) {
+    deployment = await Deployment().sync(deployment, {
+      cdkDeploymentProcessEvent: "PILOTPLAN_ERROR",
+    });
   }
-
-  const cdkProfilePlugin = getCdkProfilePluginPath();
-
-  const cdkBinFilePath = getCdkBinFilePath(),
-    cdkDeployCommand = `${cdkBinFilePath} deploy`,
-    cdkDeployArgs = `-o ${cdkOutputPath} --app ${appPath} --plugin ${cdkProfilePlugin} --require-approval never`,
-    cdkDeployCommandExpression = `${cdkDeployCommand} ${cdkDeployArgs}`;
-
-  deployment = await Deployment().sync(deployment, {
-    cdkDeploymentProcessEvent: "PROCESSING",
-  });
-
-  const cdkDeploy = shell.exec(cdkDeployCommandExpression, {
-    silent: false,
-    async: false,
-  });
-
-  station = await Station().sync(station, {
-    cfStackArn: cdkDeploy.stdout.trim(),
-  });
-
-  deployment = await Deployment().sync(deployment, {
-    cdkDeployProcessStatus: cdkDeploy.code,
-    cdkDeploymentProcessEvent: "TERMINATED",
-  });
 
   return {};
 };
