@@ -5,8 +5,13 @@ const shell = require("shelljs");
 
 const Deployment = require("../models/deployment");
 const Station = require("../models/station");
+const StationProfile = require("../models/stationProfile");
 
-const getAwsProfileConfigFilePath = profileName => {
+const {
+  generateAwsProfileCommandConfig,
+} = require("../helpers/generateAwsProfileConfig");
+
+const getAwsProfileConfigFilePath = (profileName) => {
   let path = `/tmp/.aws.${profileName}`;
 
   if (process.env.APP_ENV === "local") {
@@ -51,12 +56,23 @@ const getCdkProfilePluginPath = () => {
   return path;
 };
 
-const generateAwsProfileConfig = event => {
+const getCdkAppBinPath = () => {
+  const defaultWorkdir = getDefaultWorkdir();
+
+  return `${defaultWorkdir}/bin`;
+};
+
+const getCdkAppPath = (cdkAppName) => {
+  const cdkAppBinPath = getCdkAppBinPath();
+  return `${cdkAppBinPath}/${cdkAppName}.js`;
+};
+
+const generateAwsProfileConfig = (event) => {
   const config = {
     profileName: event.requestId,
     aws_access_key_id: event.credentials.aws_access_key_id,
     aws_secret_access_key: event.credentials.aws_secret_access_key,
-    aws_region: event.credentials.aws_region
+    aws_region: event.credentials.aws_region,
   };
 
   const awsProfileConfigFilePath = getAwsProfileConfigFilePath(
@@ -64,38 +80,32 @@ const generateAwsProfileConfig = event => {
   );
   const cdkOutputPath = getCdkOutputPath();
 
-  shell.exec(`
-rm -rf ${awsProfileConfigFilePath}
-mkdir ${awsProfileConfigFilePath}
-rm -rf ${cdkOutputPath}
-mkdir ${cdkOutputPath}
+  const awsProfileConfigShellCommand = generateAwsProfileCommandConfig(
+    awsProfileConfigFilePath,
+    cdkOutputPath,
+    config
+  );
 
-sh -c "cat <<EOF >> ${awsProfileConfigFilePath}/config
-[profile ${config.profileName}]
-aws_access_key_id=${config.aws_access_key_id}
-aws_secret_access_key=${config.aws_secret_access_key}
-region=${config.aws_region}
-output=json
-EOF"
-  `);
+  shell.exec(awsProfileConfigShellCommand);
 };
 
-const generateStationInputFile = event => {
+const generateStationInputFile = (event) => {
   const cdkStationInputFilePath = getCdkStationInputFilePath();
   fs.writeFileSync(cdkStationInputFilePath, JSON.stringify(event));
 
   return event;
 };
 
-module.exports.handler = async event => {
+module.exports.handler = async (event) => {
   generateAwsProfileConfig(event);
   const stationInput = generateStationInputFile(event);
 
   let deployment = await Deployment().findFirstById(stationInput.deploymentId);
   let station = await Station().findFirstById(deployment.stationId);
+  let stationProfile = await StationProfile().findFirstById(station.profileId);
 
   const cdkOutputPath = getCdkOutputPath(),
-    defaultWorkdir = getDefaultWorkdir();
+    appPath = getCdkAppPath(stationProfile.properties.cdkAppName);
 
   if (process.env.APP_ENV === "dev") {
     // Access tmp folder as workdir (AWS Lambda enable '/tmp' to read/write)
@@ -106,25 +116,25 @@ module.exports.handler = async event => {
 
   const cdkBinFilePath = getCdkBinFilePath(),
     cdkDeployCommand = `${cdkBinFilePath} deploy`,
-    cdkDeployArgs = `-o ${cdkOutputPath} --app ${defaultWorkdir}/bin/station-maker.js --plugin ${cdkProfilePlugin} --require-approval never`,
+    cdkDeployArgs = `-o ${cdkOutputPath} --app ${appPath} --plugin ${cdkProfilePlugin} --require-approval never`,
     cdkDeployCommandExpression = `${cdkDeployCommand} ${cdkDeployArgs}`;
 
   deployment = await Deployment().sync(deployment, {
-    cdkDeploymentProcessEvent: "PROCESSING"
+    cdkDeploymentProcessEvent: "PROCESSING",
   });
 
   const cdkDeploy = shell.exec(cdkDeployCommandExpression, {
     silent: false,
-    async: false
+    async: false,
   });
 
   station = await Station().sync(station, {
-    cfStackArn: cdkDeploy.stdout.trim()
+    cfStackArn: cdkDeploy.stdout.trim(),
   });
 
   deployment = await Deployment().sync(deployment, {
     cdkDeployProcessStatus: cdkDeploy.code,
-    cdkDeploymentProcessEvent: "TERMINATED"
+    cdkDeploymentProcessEvent: "TERMINATED",
   });
 
   return {};
